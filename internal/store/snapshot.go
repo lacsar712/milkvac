@@ -80,6 +80,9 @@ type MilkingSnapshot struct {
 
 func CloneMilkingSnapshot(s MilkingSnapshot) MilkingSnapshot {
 	out := MilkingSnapshot{Tower: s.Tower}
-	out.Segments = s.Segments
+	if len(s.Segments) > 0 {
+		out.Segments = make([]SegmentSnapshot, len(s.Segments))
+		copy(out.Segments, s.Segments)
+	}
 	return out
 }
