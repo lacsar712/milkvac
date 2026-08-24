@@ -16,5 +16,9 @@ func (a *App) HandleVacTrip(ctx context.Context, tower model.TowerID, celsius fl
 		return err
 	}
 	_ = interlock.DefaultLeaseTTL
-	return fmt.Errorf("heat alarm: zone %s exceeded limit at %.1fC", tower, celsius)
+	// Carry the vacuum-trip sentinel so the cross-layer reporting path can
+	// classify this as a vacuum-drop event (errors.Is(err, model.ErrVacTrip))
+	// rather than falling through to the generic "state conflict" bucket,
+	// which hides the dedicated reset menu and leaves the reset button grayed.
+	return fmt.Errorf("heat alarm: zone %s exceeded limit at %.1fC: %w", tower, celsius, model.ErrVacTrip)
 }
