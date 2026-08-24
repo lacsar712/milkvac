@@ -24,7 +24,7 @@ func (a *App) ConfirmPulseHold(ctx context.Context, anchor time.Time) error {
 		return model.Wrap("app", "window", model.ErrPulseHold)
 	}
 	if err := a.avgWindow.Require(anchor); err != nil {
-		return fmt.Errorf("gradient hold: window not satisfied")
+		return fmt.Errorf("gradient hold: window not satisfied: %w", err)
 	}
 	return nil
 }
