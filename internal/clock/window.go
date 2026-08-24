@@ -19,7 +19,18 @@ func NewPulseWindow(clk Clock, duration time.Duration) *PulseWindow {
 }
 
 func (w *PulseWindow) Active(anchor time.Time) bool {
-	return time.Since(anchor) < w.duration
+	// Track the injected process beat, not the wall clock: when the beat-lock
+	// freezes the process clock, the closure window must freeze with it instead
+	// of advancing on wall time.
+	now := anchor
+	if w.clk != nil {
+		now = w.clk.Now()
+	}
+	elapsed := now.Sub(anchor)
+	if elapsed < 0 {
+		elapsed = 0
+	}
+	return elapsed < w.duration
 }
 
 func (w *PulseWindow) Require(anchor time.Time) error {
