@@ -1,6 +1,6 @@
 # milkvac
 
-Dairy milking parlor vacuum loop process control.
+milkvac 是一套乳品挤奶厅真空回路工业过程控制系统，用于真空监测、调节与过程联锁。
 
 ## Requirements
 
